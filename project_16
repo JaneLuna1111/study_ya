@@ -1,0 +1,14 @@
+SELECT p.id,
+       COUNT(e.instituition)
+FROM (
+    (SELECT name,
+            id
+      FROM company
+      WHERE status = 'closed') AS clos
+ JOIN (SELECT company_id
+        FROM funding_round
+        WHERE is_first_round = 1 
+        AND is_last_round = 1) AS cc ON clos.id=cc.company_id)
+JOIN people AS p ON p.company_id=cc.company_id
+JOIN education AS e ON e.person_id=p.id
+GROUP BY p.id;
